@@ -1,25 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js
+import React, { useState } from 'react';
+import { I18nextProvider, useTranslation } from 'react-i18next';
+import styled from 'styled-components';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import HomePage from './components/HomePage';
+import i18n from './components/i18n';
+import AboutPage from './components/AboutPage';
+import Navbar from './components/Navbar';
 
-function App() {
+const AppContainer = styled.div`
+  text-align: center;
+`;
+
+const App = () => {
+  const [language, setLanguage] = useState('en');
+
+  const toggleLanguage = () => {
+    console.log('triggered');
+    const newLanguage = language === 'en' ? 'hi' : 'en';
+    setLanguage(newLanguage);
+    console.log(newLanguage);
+    i18n.changeLanguage(newLanguage);
+   
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <I18nextProvider i18n={i18n}>
+      <Router>
+        <AppContainer>
+        <Navbar/>
+          <Routes>
+            
+            <Route
+              path="/"
+              element={<HomePage toggleLanguage={toggleLanguage} />}
+            />
+            <Route
+              path="/about"
+              element={<AboutPage toggleLanguage={toggleLanguage} />}
+            />
+          </Routes>
+        </AppContainer>
+      </Router>
+    </I18nextProvider>
   );
-}
+};
 
 export default App;
